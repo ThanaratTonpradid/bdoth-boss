@@ -14,6 +14,7 @@ interface IsItTimePayload {
 @Injectable()
 export class TriggerService {
   private readonly logger = new Logger(TriggerService.name);
+  private readonly channelId = process.env.DISCORD_CHANNEL;
 
   constructor(
     @InjectDiscordClient()
@@ -29,10 +30,10 @@ export class TriggerService {
     if (bossHourIndex !== -1) {
       if (bossHourIndex === 0) {
         const { isItTime, suffix } = this.isItTime(Minutes.THIRTY_MINUTES);
-        this.sendMessage(isItTime, `${bossName} ${suffix}`);
+        await this.sendMessage(isItTime, bossName, suffix);
       } else {
         const { isItTime, suffix } = this.isItTime(Minutes.SIXTY_MINUTES);
-        this.sendMessage(isItTime, `${bossName} ${suffix}`);
+        await this.sendMessage(isItTime, bossName, suffix);
       }
     }
   }
@@ -63,7 +64,7 @@ export class TriggerService {
         suffix: `จะปรากฏตัวอีก ${remainMinute - currentMinute} นาที`,
       };
     }
-    if (remainMinute - currentMinute === remainMinute) {
+    if (remainMinute - currentMinute === 0 || remainMinute - currentMinute === 60) {
       return {
         isItTime: true,
         suffix: `ปรากฏตัวแล้ว`,
@@ -75,17 +76,17 @@ export class TriggerService {
     };
   }
 
-  sendMessage(isItTime: boolean, bossname: string | null): string | null {
-    if (isItTime && bossname) {
-      this.logger.info(bossname);
-      this.sendMessageToDiscordId(bossname);
-      return bossname;
+  async sendMessage(isItTime: boolean, bossName: string | null, suffix: string): Promise<string | null> {
+    if (isItTime && bossName) {
+      this.logger.info(`${bossName} ${suffix}`);
+      await this.sendMessageToDiscordId(`${bossName} ${suffix}`);
+      return bossName;
     }
     return null;
   }
 
-  async sendMessageToDiscordId(message = 'content') {
-    const channel = this.discordClient.channels.cache.get('947261648383643749') as DMChannel;
+  async sendMessageToDiscordId(message = 'content'): Promise<void> {
+    const channel = this.discordClient.channels.cache.get(this.channelId) as DMChannel;
     const sendMessage = await channel.send(message);
     this.logger.debug(!!sendMessage);
   }
