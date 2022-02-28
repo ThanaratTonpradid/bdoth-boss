@@ -1,0 +1,8 @@
+*
+!yarn.lock
+!package.json
+!tsconfig*.json
+!nest-cli.json
+!src
+!.deployment/env
+!.deployment/cmd
