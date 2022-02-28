@@ -1,0 +1,27 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "gitlens.codeLens.authors.enabled": false,
+  "gitlens.codeLens.recentChange.enabled": false,
+  "vscode-coverage-highlighter.coveredColor": "",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "cSpell.ignorePaths": [
+    ".git",
+    ".vscode",
+    "dist",
+    "coverage",
+    "node_modules",
+    "vscode-extension",
+    "package-lock.json",
+    "package.json",
+    "yarn.lock"
+  ],
+  "files.associations": {
+    "*.Makefile": "makefile",
+    "*.env*": "dotenv"
+  },
+}
