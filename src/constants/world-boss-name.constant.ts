@@ -10,7 +10,7 @@ export enum BossName {
 }
 
 export const bossSuffix = ['จะปรากฏตัวอีก 30 นาที', 'จะปรากฏตัวอีก 15 นาที', 'จะปรากฏตัวอีก 5 นาที', 'ปรากฏตัวแล้ว'];
-export const bossHour = [0, 9, 13, 14, 18, 22];
+export const bossHour = [1, 10, 14, 15, 19, 23];
 export const bossTime = ['00:30', '10:00', '14:00', '15:00', '19:00', '23:00'];
 export const bossByDay = {
   '0-00:30': [BossName.KZARKA],
@@ -39,7 +39,7 @@ export const bossByDay = {
   '3-14:00': [BossName.KARANDA, BossName.KZARKA],
   '3-15:00': null,
   '3-19:00': [BossName.KUTUM, BossName.NOUVER],
-  '3-23:00': [BossName.OFFIN],
+  '3-23:00': [BossName.VELL],
 
   '4-00:30': [BossName.KUTUM],
   '4-10:00': [BossName.KARANDA, BossName.KZARKA],
