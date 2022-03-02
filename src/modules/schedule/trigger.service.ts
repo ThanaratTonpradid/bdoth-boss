@@ -24,15 +24,25 @@ export class TriggerService {
   async triggerDelayedWorldBoss(): Promise<void> {
     this.logger.debug(this.triggerDelayedWorldBoss.name);
     const currentHour = DateTimeUtils.currentHour();
-    const bossHourIndex = bossHour.indexOf(currentHour);
-    const bossTimeKey = bossTime[bossHourIndex];
-    const bossName = this.getBossName(bossTimeKey);
-    if (bossHourIndex !== -1) {
-      if (bossHourIndex === 0) {
-        const { isItTime, suffix } = this.isItTime(Minutes.THIRTY_MINUTES);
+    const beforeHourIndex = bossHour.indexOf(currentHour + 1);
+    const afterHourIndex = bossHour.indexOf(currentHour);
+    if (beforeHourIndex !== -1) {
+      const bossKey = bossTime[beforeHourIndex];
+      const bossName = this.getBossName(bossKey);
+      const targetBeforeHour = bossHour[beforeHourIndex];
+      if (targetBeforeHour - currentHour === 1) {
+        const target = targetBeforeHour === 1 ? Minutes.THIRTY_MINUTES : Minutes.SIXTY_MINUTES;
+        const { isItTime, suffix } = this.isItTime(target);
         await this.sendMessage(isItTime, bossName, suffix);
-      } else {
-        const { isItTime, suffix } = this.isItTime(Minutes.SIXTY_MINUTES);
+      }
+    }
+    if (afterHourIndex !== -1) {
+      const bossKey = bossTime[afterHourIndex];
+      const bossName = this.getBossName(bossKey);
+      const targetAfterHour = bossHour[afterHourIndex];
+      if (targetAfterHour - currentHour === 0 && targetAfterHour !== 1) {
+        const target = Minutes.ONE_MINITES - Minutes.ONE_MINITES;
+        const { isItTime, suffix } = this.isItTime(target);
         await this.sendMessage(isItTime, bossName, suffix);
       }
     }
@@ -64,7 +74,7 @@ export class TriggerService {
         suffix: `จะปรากฏตัวอีก ${remainMinute - currentMinute} นาที`,
       };
     }
-    if (remainMinute - currentMinute === 0 || remainMinute - currentMinute === 60) {
+    if (remainMinute - currentMinute === 0) {
       return {
         isItTime: true,
         suffix: `ปรากฏตัวแล้ว`,

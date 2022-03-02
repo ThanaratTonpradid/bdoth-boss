@@ -59,6 +59,16 @@ describe('TriggerService', () => {
       expect(spyIsItTime).toHaveBeenCalledWith(Minutes.SIXTY_MINUTES);
       expect(spySendMessage).toHaveBeenCalledWith(true, 'bossname', 'bossname');
     });
+
+    it('should call service.isItTime(0) and service.sendMessage()', async () => {
+      jest.spyOn(DateTimeUtils, 'currentHour').mockReturnValueOnce(10);
+      jest.spyOn(service, 'getBossName').mockReturnValueOnce('bossname');
+      const spyIsItTime = jest.spyOn(service, 'isItTime').mockReturnValueOnce({ isItTime: true, suffix: 'bossname' });
+      const spySendMessage = jest.spyOn(service, 'sendMessage').mockResolvedValueOnce('bossname');
+      await service.triggerDelayedWorldBoss();
+      expect(spyIsItTime).toHaveBeenCalledWith(Minutes.SIXTY_MINUTES - Minutes.SIXTY_MINUTES);
+      expect(spySendMessage).toHaveBeenCalledWith(true, 'bossname', 'bossname');
+    });
   });
 
   describe('getBossName()', () => {
@@ -127,7 +137,7 @@ describe('TriggerService', () => {
     it('should return false when remain time is current time case isItTime(Minutes.SIXTY_MINUTES)', () => {
       jest.spyOn(DateTimeUtils, 'currentMinute').mockReturnValueOnce(0);
       const res = service.isItTime(Minutes.SIXTY_MINUTES);
-      expect(res.isItTime).toBeTruthy();
+      expect(res.isItTime).toBeFalsy();
     });
 
     it('should return false when remain time is less FIVE_MINUTES case isItTime(Minutes.SIXTY_MINUTES)', () => {
