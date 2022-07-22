@@ -22,7 +22,6 @@ export class TriggerService {
   ) {}
 
   async triggerDelayedWorldBoss(): Promise<void> {
-    this.logger.debug(this.triggerDelayedWorldBoss.name);
     const currentHour = DateTimeUtils.currentHour();
     const beforeHourIndex = bossHour.indexOf(currentHour + 1);
     const afterHourIndex = bossHour.indexOf(currentHour);
